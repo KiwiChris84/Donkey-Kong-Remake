@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Barrel; 
 
 public class GameManager : MonoBehaviour
 {
     private int level;
     private int lives;
     private int score;
+    private int something = 1; 
+
 
     private void Start()
     {
@@ -17,11 +20,11 @@ public class GameManager : MonoBehaviour
     {
         lives = 3;
         score = 0;
-
+Barrel.speed = 5;
         LoadLevel(1);
     }
 
-    private void LoadLevel(int index)
+    private  void LoadLevel(int index)
     {
         level = index;
 
@@ -34,6 +37,7 @@ public class GameManager : MonoBehaviour
         }
 
         Invoke(nameof(LoadScene), 1f);
+        Barrel.speed = Barrel.speed + 1;
     }
 
     private void LoadScene()
@@ -64,5 +68,7 @@ public class GameManager : MonoBehaviour
             LoadLevel(level);
         }
     }
-
+    public void Skip(){
+            LevelComplete();  
+    }
 }

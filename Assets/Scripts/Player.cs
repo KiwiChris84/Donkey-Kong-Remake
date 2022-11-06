@@ -78,6 +78,7 @@ public class Player : MonoBehaviour
             direction.y = Input.GetAxis("Vertical") * moveSpeed;
         } else if (grounded && Input.GetButtonDown("Jump")) {
             direction = Vector2.up * jumpStrength;
+
         } else {
             direction += Physics2D.gravity * Time.deltaTime;
         }
@@ -99,6 +100,9 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rigidbody.MovePosition(rigidbody.position + direction * Time.fixedDeltaTime);
+         if (grounded && Input.GetButtonDown("Fire1")){
+            FindObjectOfType<GameManager>().Skip();
+         }
     }
 
     private void AnimateSprite()

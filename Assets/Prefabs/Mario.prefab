@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7305369858844227701}
   m_Layer: 0
   m_Name: Mario
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e012c1b8315224e4e91aa242a2fb4ef3, type: 3}
   climbSprite: {fileID: 21300000, guid: e83b0888c1843a04b91a24add8146e0c, type: 3}
   moveSpeed: 3
-  jumpStrength: 4
+  jumpStrength: 4.5
 --- !u!50 &2159170170007121542
 Rigidbody2D:
   serializedVersion: 4
