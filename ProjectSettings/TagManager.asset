@@ -4,25 +4,24 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Obstacle
-  - Ground
-  - Objective
-  - Ladder
+  - Asteroid
+  - Bullet
+  - Boundary
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - 
   - Water
   - UI
-  - Ladder
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Bullet
+  - Asteroid
+  - Boundary
+  - Ignore Collisions
+  - SecondBoundary
   - 
   - 
   - 

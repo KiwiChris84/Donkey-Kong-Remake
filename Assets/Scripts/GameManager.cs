@@ -1,74 +1,97 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using static Barrel; 
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private int level;
-    private int lives;
-    private int score;
-    private int something = 1; 
+    public Player player;
+    public ParticleSystem explosionEffect;
+    public GameObject gameOverUI;
 
+    public int score { get; private set; }
+    public Text scoreText;
 
+    public int lives { get; private set; }
+    public Text livesText;
+    public int destroyed;
     private void Start()
     {
-        DontDestroyOnLoad(gameObject);
         NewGame();
     }
 
-    private void NewGame()
+    private void Update()
     {
-        lives = 3;
-        score = 0;
-Barrel.speed = 5;
-        LoadLevel(1);
+        if (lives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
+            NewGame();
+        }
     }
 
-    private  void LoadLevel(int index)
+    public void NewGame()
     {
-        level = index;
+        MissileJellyfish[] MissileJellyfishs = FindObjectsOfType<MissileJellyfish>();
 
-        Camera camera = Camera.main;
-
-        // Don't render anything while loading the next scene to create
-        // a simple scene transition effect
-        if (camera != null) {
-            camera.cullingMask = 0;
+        for (int i = 0; i < MissileJellyfishs.Length; i++) {
+            Destroy(MissileJellyfishs[i].gameObject);
         }
 
-        Invoke(nameof(LoadScene), 1f);
-        Barrel.speed = Barrel.speed + 1;
+        gameOverUI.SetActive(false);
+
+        SetScore(0);
+        SetLives(1);
+        Respawn();
     }
 
-    private void LoadScene()
+    public void Respawn()
     {
-        SceneManager.LoadScene(level);
+        player.transform.position = Vector3.zero;
+        player.gameObject.SetActive(true);
     }
 
-    public void LevelComplete()
+    public void MissileJellyfishDestroyed(MissileJellyfish MissileJellyfish)
     {
-        score += 1000;
+        explosionEffect.transform.position = MissileJellyfish.transform.position;
+        explosionEffect.Play();
 
-        int nextLevel = level + 1;
-
-        if (nextLevel < SceneManager.sceneCountInBuildSettings) {
-            LoadLevel(nextLevel);
+        if (MissileJellyfish.size < 0.7f) {
+            SetScore(score + 100); // small MissileJellyfish
+            destroyed = destroyed + 1;
+        } else if (MissileJellyfish.size < 1.4f) {
+            SetScore(score + 50); // medium MissileJellyfish
+            destroyed = destroyed + 1;
         } else {
-            LoadLevel(1);
+            SetScore(score + 25); // large MissileJellyfish
+            destroyed = destroyed + 1;
         }
     }
 
-    public void LevelFailed()
+    public void PlayerDeath(Player player)
     {
-        lives--;
+        explosionEffect.transform.position = player.transform.position;
+        explosionEffect.Play();
+
+        SetLives(lives - 1);
 
         if (lives <= 0) {
-            NewGame();
+            GameOver();
         } else {
-            LoadLevel(level);
+            Invoke(nameof(Respawn), player.respawnDelay);
         }
     }
-    public void Skip(){
-            LevelComplete();  
+
+    public void GameOver()
+    {
+        gameOverUI.SetActive(true);
     }
+
+    private void SetScore(int score)
+    {
+        this.score = score;
+        scoreText.text = score.ToString();
+    }
+
+    private void SetLives(int lives)
+    {
+        this.lives = lives;
+        livesText.text = lives.ToString();
+    }
+
 }
